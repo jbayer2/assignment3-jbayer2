@@ -7,12 +7,14 @@ Created on Tue May 15 18:00:40 2018
 
 import numpy as np
 from processTransitions import extract
-from pylab import plot,show,xlabel,ylabel,title,legend,ylim,xticks,scatter,savefig,gca,annotate
-from collections import  Counter
-#for testing purposes only
+from pylab import plot,show,xlabel,ylabel,title,legend,ylim,xticks,\
+     scatter,savefig,gca,annotate
+#from collections import  Counter
+
+#extract data from test case
 data=extract("Atoms/ca1.atom")
 
-#store the data so it can be seen in the variable explorer    
+#store the data so it can be seen in the variable explorer (Spyder)   
 Element = data[0] + data[1]
 ionization_energy = data[2]
 number_of_energy_levels = data[3]
@@ -23,7 +25,7 @@ energies = data[7]
 lower_energy = data[8]
 higher_energy = data[9]
 oscillator_strength = data[10] 
-orbital_information = data[11]
+orbital_information = data[11]#AKA orbital configuration
 
 
 
@@ -31,12 +33,16 @@ orbital_information = data[11]
 #*****************************************************************************#
 
 ##Set Up##
-# letting the range: {0,1}, and the domain: {0,ionization_energy}, set up orbitals shown on 
+# letting the range: {0,1}, and the domain: {0,ionization_energy}
 
-spacingArray=np.linspace(0.05,0.95,5)#for S -> G orbitals
-#spacingArray=np.linspace(0.05,0.95,6)#for S -> G and unknown X orbitals
 
-#label orbitals along the axis
+# for S -> G orbitals
+spacingArray=np.linspace(0.05,0.95,5)
+
+# for S -> G and unknown X orbitals
+#spacingArray=np.linspace(0.05,0.95,6)
+
+# label orbitals along the axis
 xticks(spacingArray,['S','P','D','F','G'])
 #xticks(spacingArray,['S','P','D','F','G','X'])
 
@@ -48,7 +54,10 @@ xlabel("orbital")
 
 
 
-#look and plot all e levels and transitions between them
+# look at and plot all energy levels and transitions between them
+
+# High and Low as keywords generally refer to ->
+# higher energy and lower energy levels
 #*****************************************************************************#
 
 #store x and y values for specific transitions
@@ -56,14 +65,26 @@ xHigh = []
 yHigh = []
 xLow = []
 yLow = []
-orbitalHigh = 0# holds the position along the x axis (hence level)
-orbitalLow = 0# holds the position along the x axis (hence level)
-count = 0# counts the number of transitions between S, P, D, F, and G oribtals
-#temp
+
+# holds the positions along the x axis (hence level)
+orbitalHigh = 0
+orbitalLow = 0
+
+# counts the number of transitions between S, P, D, F, and G oribtals
+count = 0
+
+# temporary storage array
 store = []
 #storeH = []
 #storeL = []
-#the following code is to map all transitions, even between undefined (X) orbitals
+
+
+
+
+
+#****************************************************************************#
+# the following code is to map all transitions, even between undefined (X) ->
+# orbitals
 """
 for n in range(0,(len(higher_energy)),1):
     
@@ -155,22 +176,50 @@ for n in range(0,(len(higher_energy)),1):
              [yLow[n],yHigh[n]],
              linewidth=0.25)
 """
+#****************************************************************************#
 
-#the following plots only the S, P, D, F, and G orbitals and their transitions
+
+
+
+
+
+
+
+
+
+
+# the following plots only the S, P, D, F, and G orbitals and their transitions
+#****************************************************************************#
+
+# loop through higher energies storing number assocation numbers (in file) ->
+# for the higher energy level.
 for n in range(0,(len(higher_energy)),1):
-    
-        criterionMetHigh=False# wether is belongs to the S, P, D, F, or G orbitals
-        criterionMetLow=False# wether is belongs to the S, P, D, F, or G orbitals
+        # store criterion as boolean as to wether the orbitals belong to the ->
+        # higher or lower energy level AND is not above a G orbital
+        criterionMetHigh=False
+        criterionMetLow=False
         
-        highANum=higher_energy[n]# this gives an association number
-        lowANum=lower_energy[n]# this gives an association number
-
-        higherEnergyLvl = association_numbers_data_1.index(highANum)# finds corresponding energy level via association number
-        lowerEnergyLvl = association_numbers_data_1.index(lowANum)# finds corresponding energy level via association number
-
-        higherInformation = orbital_information[higherEnergyLvl]# get the information on the orbitals in the transtion
-        lowerInformation = orbital_information[lowerEnergyLvl]# get the information on the orbitals in the transtion
-
+        
+        
+        # these are stored association numbers for the transition.
+        
+        #NEW NOTE:
+        # For ex. E = 0 [1/cm] -> E = 80000 [1/cm] could be associated with the
+        # numbers 1 -> 458 transition.
+        # These numbers are given in the .atom file, and stored in ->
+        # the association_numbers_data_1 array.
+        highANum=higher_energy[n]
+        lowANum=lower_energy[n]
+        
+        # finds corresponding energy level via association numbers
+        higherEnergyLvl = association_numbers_data_1.index(highANum)
+        lowerEnergyLvl = association_numbers_data_1.index(lowANum)
+        
+        # get the information on the orbitals in the transtion
+        higherInformation = orbital_information[higherEnergyLvl]
+        lowerInformation = orbital_information[lowerEnergyLvl]
+        
+        # past storage array for the above information
         #store.append([("H:" + str(higherEnergyLvl) + "," + str(higherInformation)),("L:" + str(lowerEnergyLvl) + "," + str(lowerInformation))])
         
         #check and see which orbital the level belongs to, and put plot it
@@ -207,7 +256,15 @@ for n in range(0,(len(higher_energy)),1):
             
             
             
-        #check and see which orbital the level belongs to, and put plot it
+        # check and see which orbital the level belongs to, and put plot it
+        
+        # NEW NOTE: energies used to be capped for some species as the ->
+        # gap between some orbitals was too large to show all orbitals cleanly
+        # on the diagram.
+        
+        # NEW NOTE 2: this used ot be where spacing and energies were stored ->
+        # but there were complications which lead to improper labels
+        
         if (lowerInformation.find('S')!=-1):# and energies[higherEnergyLvl] <= 40000):
             criterionMetLow=True
             orbitalLow=0
@@ -239,7 +296,8 @@ for n in range(0,(len(higher_energy)),1):
             #xLow.append(spacingArray[orbitalLow])
             #yLow.append(energies[lowerEnergyLvl])
 
-        # only plot if both the higher and lower orbitals in a transition are S, P , D, F, or G
+        # only plot if both the higher and lower orbitals in a transition ->
+        # are S, P , D, F, or G
         if(criterionMetHigh== True and criterionMetLow==True):# and energies[higherEnergyLvl] <= 40000):
             xLow.append(spacingArray[orbitalLow])
             yLow.append(energies[lowerEnergyLvl])
@@ -250,35 +308,54 @@ for n in range(0,(len(higher_energy)),1):
             plot([xLow[-1],xHigh[-1]],
                  [yLow[-1],yHigh[-1]],
                  linewidth=0.25)
+            
+            # store the orbital information IFF not seen before
             if (orbital_information[lowerEnergyLvl] not in store):
 
     
                 store.append(orbital_information[lowerEnergyLvl])
-    
+                
+                # A failed attempt at annotating orbitals on the graph
                 #annotate(orbital_information[higherEnergyLvl],
                 #        xy=(xHigh[-1] + 0.035, energies[higherEnergyLvl]))
                 
                 #annotate(orbital_information[lowerEnergyLvl],
                 #     xy=(xLow[-1] + 0.035, energies[lowerEnergyLvl]))
-            
+                
+            # count transitions (testing)
             #count+=1
+#*****************************************************************************#
 
 
-#plot the e levels
+
+
+
+
+
+
+
+
+# plot the energy levels
+#*****************************************************************************#
 
 #see how many transitions are in each energy levels (testing)
 #print(Counter(xLow))
 #print(Counter(xHigh))
-            
-#gca().invert_yaxis()
 
-# look through each shell and only label shells 
+
+# loop through each shell stored and only label unlabelled shells 
 for shell in store:
-    indicies = [i for i, currentShell in enumerate(orbital_information)
-    if currentShell == shell]# get the indicies of all of all lower orbitals shells
-    energy = 1e16# place holder for lowest energy that will help place a annotated label for a shell
-    spacing = 0# holds the spacing index in the spacing array for the shell label
     
+    # get the indicies of all of all lower orbitals shells
+    indicies = [i for i, currentShell in enumerate(orbital_information)
+    if currentShell == shell]
+    # place holder for lowest energy that will help place a annotated label ->
+    # for a shell
+    energy = 1e16
+    # holds the spacing index in the spacing array for the shell label
+    spacing = 0
+    
+    #previous testing to sum the indacies and contribute to a length variable
     #summ += len(indicies)
     
     if(shell.find('S')!=-1):
@@ -292,25 +369,37 @@ for shell in store:
     elif(shell.find('G')!=-1):
             spacing = 4
     
+    # loop through stored shells and store the upper energy level
     for someShell in indicies:
 
 
         currentEnergy = energies[someShell]
         
+        # if the energy level happens to belong to the lower energy, fix this
         if (currentEnergy <= energy):
             energy = currentEnergy
         
 
-            
+    # annotate the graph with new information on shells
     annotate(shell, xy=(spacingArray[spacing] + 0.055, energy))
-            
+#*****************************************************************************#           
 
 
-title(Element + " Grotrian Diagram")
-scatter(xLow,yLow,marker="_",s=900,c='#000000')
-scatter(xHigh,yHigh,marker="_",s=900,c='#000000')
-savefig("GrotrianDiagramCaI.png",dpi=1200)
-show()
+
+
+
+
+
+
+
 
 #*****************************************************************************#
+# plot and save the developed grotrian diagram
+title(Element)
+scatter(xLow,yLow,marker="_",s=900,c='#000000')
+scatter(xHigh,yHigh,marker="_",s=900,c='#000000')
+savefig(Element + "_Grotrian Diagram.png",dpi=1200)
+show()
+#*****************************************************************************#
 
+#END OF FILE
