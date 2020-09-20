@@ -16,10 +16,10 @@ from pylab import plot,show,xlabel,ylabel,title,legend,ylim,xticks,\
 inital_input = ""
 # placeholder for data to be stored
 data = []
-while(inital_input==""):
+while(inital_input=="" or inital_input.endswith(".atom")!=True):
     print("Enter a NON-BINARY species file FOUND IN THE Atoms FOLDER\n"\
           + "Format (lowercase) = ElementSpecies.atom; for ex. ca1.atom: ")
-    inital_input = input()
+    inital_input = input().lower()
 
 data=extract("Atoms/" + inital_input)
 
@@ -408,7 +408,7 @@ for shell in store:
 title(Element)
 scatter(xLow,yLow,marker="_",s=900,c='#000000')
 scatter(xHigh,yHigh,marker="_",s=900,c='#000000')
-savefig(Element + "_Grotrian Diagram.png",dpi=1200)
+savefig(Element + "_Grotrian_Diagram.png",dpi=1200)
 show()
 print("DONE!")
 #*****************************************************************************#
