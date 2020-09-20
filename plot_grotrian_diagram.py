@@ -11,8 +11,18 @@ from pylab import plot,show,xlabel,ylabel,title,legend,ylim,xticks,\
      scatter,savefig,gca,annotate
 #from collections import  Counter
 
-#extract data from test case
-data=extract("Atoms/ca1.atom")
+#extract data
+# store inital input for the .atom file
+inital_input = ""
+# placeholder for data to be stored
+data = []
+while(inital_input==""):
+    print("Enter a NON-BINARY species file FOUND IN THE Atoms FOLDER\n"\
+          + "Format (lowercase) = ElementSpecies.atom; for ex. ca1.atom: ")
+    inital_input = input()
+
+data=extract("Atoms/" + inital_input)
+
 
 #store the data so it can be seen in the variable explorer (Spyder)   
 Element = data[0] + data[1]
@@ -400,6 +410,7 @@ scatter(xLow,yLow,marker="_",s=900,c='#000000')
 scatter(xHigh,yHigh,marker="_",s=900,c='#000000')
 savefig(Element + "_Grotrian Diagram.png",dpi=1200)
 show()
+print("DONE!")
 #*****************************************************************************#
 
 #END OF FILE
