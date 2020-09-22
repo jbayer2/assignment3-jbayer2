@@ -1,6 +1,6 @@
 # A9501 Assignment 3
 
-## Reviewers: If you have found this branch, you are in the right place!
+## Reviewers: If you have found this fork, you are in the right place!
 
 ## Part 1: 
 Find some of your own old code that makes plots (or use the sample Python code provided), and rewrite it according to the good programming principles discussed in class - including documentation. Use git to track your changes and submit the project as a repository. Include sample plot outputs.
